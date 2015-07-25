@@ -1,4 +1,4 @@
-typeemoji={
+typeemoji = {
     "amenity:restaurant": "\xF0\x9F\x8D\xB4",
     "amenity:fast_food": "\xF0\x9F\x8D\x94",
     "amenity:toilets": "\xF0\x9F\x9A\xBB",
@@ -14,7 +14,7 @@ typeemoji={
     "amenity:police": "\xF0\x9F\x9A\x93",
     "shop:tobacco": "\xF0\x9F\x9A\xAC",
     "vending:cigarettes": "\xF0\x9F\x9A\xAC",
-    "highway:cycleway": "\xF0\x9F\x9A\xB2",
+
     "emergency:phone": "\xF0\x9F\x86\x98",
     "emergency:defibrillator": "\xF0\x9F\x92\x94",
     "tourism:information": "\xE2\x84\xB9",

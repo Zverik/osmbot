@@ -49,7 +49,7 @@ def SearchCommand(message):
                 t += typeemoji[result['class']+":"+result['type']]+" "+result["display_name"]+"\n"
             else:
                 t += "\xE2\x96\xB6 "+result["display_name"]+"\n"
-                t += "\xF0\x9F\x93\x8D http://www.openstreetmap.org/?minlat={0}&maxlat={1}&minlon={2}&maxlon={3}&mlat={4}&mlon={5}\n\n".format(result['boundingbox'][0],result['boundingbox'][1],result['boundingbox'][2],result['boundingbox'][3],result['lat'],result['lon'])
+            t += "\xF0\x9F\x93\x8D http://www.openstreetmap.org/?minlat={0}&maxlat={1}&minlon={2}&maxlon={3}&mlat={4}&mlon={5}\n\n".format(result['boundingbox'][0],result['boundingbox'][1],result['boundingbox'][2],result['boundingbox'][3],result['lat'],result['lon'])
             if osm_data is not None and 'phone' in osm_data['tag']:
                 t += "\nMore info /details{0}\nPhone /phone{0}\n\n".format(result['osm_id'])
             else:
@@ -122,17 +122,22 @@ def MapCommand(message, chat_id, user_id,zoom=None,imgformat=None,lat=None,lon=N
     message = message[4:]
     if lat is not None and lon is not None:
         bbox = genBBOX(lat, lon, 0.1)
-        data = download(bbox, imageformat=imgformat, zoom=zoom)
-        if imgformat == 'pdf':
-            bot.sendDocument(chat_id, data, 'map.pdf')
-        elif imgformat == 'jpeg':
-            bot.sendPhoto(chat_id, data, "map.jpg", "Map")
-        elif imgformat == 'png':
-            bot.sendPhoto(chat_id, data, "map.png", "Map")
+        try:
+            data = download(bbox, imageformat=imgformat, zoom=zoom)
+        except ValueError as v:
+                response.append(v.message)
+        else:
+            if imgformat == 'pdf':
+                bot.sendDocument(chat_id, data, 'map.pdf')
+            elif imgformat == 'jpeg':
+                bot.sendPhoto(chat_id, data, "map.jpg", "Map")
+            elif imgformat == 'png':
+                bot.sendPhoto(chat_id, data, "map.png", "Map")
         user.set_field(user_id, 'mode', 'normal')
     else:
-        if re.match(" ?(png|jpg|pdf)? ?(\d?\d)?", message):
-            m = re.match(" ?(?P<imgformat>png|jpg|pdf)? ?(?P<zoom>\d{0,2})",message)
+        print "message:"+str(message)
+        if re.match(" ?(png|jpg|pdf)? ?(\d?\d)?$", message):
+            m = re.match(" ?(?P<imgformat>png|jpg|pdf)? ?(?P<zoom>\d{0,2})$",message)
             zoom = m.groupdict()["zoom"]
             imgformat = m.groupdict()["imgformat"]
             response.append("Please send your location to recive the map")
